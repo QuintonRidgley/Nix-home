@@ -94,12 +94,8 @@
       zsh
       oh-my-zsh
       # home-manager
-      slack
-      teams-for-linux
-      # microsoft-edge-dev
       microsoft-edge
       discord
-      zoom-us
       cbonsai
     ];
   };
@@ -142,10 +138,6 @@
 	pkgs.git
 	pkgs.btop
 	pkgs.kitty
-	# pkgs.microsoft-edge-dev
-	# pkgs.teams-for-linux
-	# pkgs.slack
-	# pkgs.discord
 	pkgs.neovim
 	pkgs.neofetch
 	pkgs.wofi
