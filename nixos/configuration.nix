@@ -94,13 +94,11 @@
       zsh
       oh-my-zsh
       # home-manager
-      slack
-      teams-for-linux
-      # microsoft-edge-dev
       microsoft-edge
       discord
-      zoom-us
       cbonsai
+      gimp
+      steam
     ];
   };
 
@@ -110,6 +108,24 @@
       enable = true;
       autosuggestions.enable = true;
       zsh-autoenv.enable = true;
+      syntaxHighlighting.enable = true;
+
+      shellAliases = {
+        re = "sudo reboot now";
+	shut = "sudo shutdown now";
+	ll = "ls -l";
+	nf = "neofetch";
+	nv = "nvim .";
+	bonsai = "cbonsai -S";
+
+	nixconf = "nvim /etc/nixos/configuration.nix";
+	update = "sudo nixos-rebuild switch";
+	garbage = "nix-collect-garbage -d";
+	hyprconf = "nvim /home/quinton/.config/hypr/hyprland.conf";
+	kittyconf = "nvim /home/quinton/.config/kitty/kitty.conf";
+
+      };
+
       ohMyZsh = {
         enable = true;
 	theme = "bira";
@@ -142,10 +158,6 @@
 	pkgs.git
 	pkgs.btop
 	pkgs.kitty
-	# pkgs.microsoft-edge-dev
-	# pkgs.teams-for-linux
-	# pkgs.slack
-	# pkgs.discord
 	pkgs.neovim
 	pkgs.neofetch
 	pkgs.wofi
