@@ -1,58 +1,52 @@
+/*
+
+██╗    ██╗ ██████╗ ███████╗██╗
+██║    ██║██╔═══██╗██╔════╝██║
+██║ █╗ ██║██║   ██║█████╗  ██║
+██║███╗██║██║   ██║██╔══╝  ██║
+╚███╔███╔╝╚██████╔╝██║     ██║
+ ╚══╝╚══╝  ╚═════╝ ╚═╝     ╚═╝
+
+Wofi Config File by Arfan Zubi
+
+*/
+
 window {
-    margin: 0px;
-    background-color: #191724;
-    border-radius: 0px;
-    border: 2px solid #eb6f92;
-    color: #e0def4;
-    font-family: 'Monofur Nerd Font';
-    font-size: 20px;
+    padding: 50px;
+    background-color: rgba(45, 53, 59, 0.85);
+    font-family: 'FiraCode Nerd Font', sans-serif;
+    font-size: 15px;
 }
 
 #input {
-    margin: 5px;
-    border-radius: 0px;
+    margin: 20px 15px;
+    padding: 10px 20px;
+    background-color: #323D43;
     border: none;
-    border-radius: 0px;;
-    color: #eb6f92;
-    background-color: #26233a;
-    
+    color: #D3C6AA;
+}
+
+#input:focus {
+    box-shadow: none;
 }
 
 #inner-box {
-    margin: 5px;
-    border: none;
-    background-color: #26233a;
-    color: #191724;
-    border-radius: 0px;
+    margin: 0 15px;
 }
 
-#outer-box {
-    margin: 15px;
-    border: none;
-    background-color: #191724;
+#img {
+    margin: 10px;
 }
 
-#scroll {
-    margin: 0px;
-    border: none;
+#entry:selected {
+    background-color: #A7C080;
+    border-radius: 5px;
 }
 
 #text {
-    margin: 5px;
-    border: none;
-    color: #e0def4;
-} 
-
-#entry:selected {
-    background-color: #eb6f92;
-    color: #191724;
-    border-radius: 0px;;
-    outline: none;
+    color: #D3C6AA;
 }
 
-#entry:selected * {
-    background-color: #eb6f92;
-    color: #191724;
-    border-radius: 0px;;
-    outline: none;
+#text:selected {
+    color: #2D353B;
 }
