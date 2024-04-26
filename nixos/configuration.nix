@@ -21,8 +21,12 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
+  # Enable networking + Tailscale VPN
   networking.networkmanager.enable = true;
+  services.tailscale.enable = true;
+  networking.nameservers = [ "100.100.100.100"];
+  networking.search = [ "tail67ef1.ts.net"];
+
 
   # Set Display
   # monitor=eDP-2,1920x1080@59.98,0x0,1
@@ -90,17 +94,20 @@
     description = "quinton";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      firefox
+      # Terminal Tools
       zsh
       oh-my-zsh
-      # home-manager
-      slack
+      cbonsai
+      zoxide
+      azure-cli
+
+      # Applications
+      firefox
       teams-for-linux
-      # microsoft-edge-dev
       microsoft-edge
       discord
       zoom-us
-      cbonsai
+      localsend
     ];
   };
 
@@ -110,6 +117,23 @@
       enable = true;
       autosuggestions.enable = true;
       zsh-autoenv.enable = true;
+      syntaxHighlighting.enable = true;
+
+      shellAliases = {
+	re = "sudo reboot now";
+	shut = "sudo shutdown now";
+	ll = "ls -l";
+	nf = "neofetch";
+	nv = "nvim .";
+	bonsai = "cbonsai -S";
+
+	nixconf = "sudo nvim /etc/nixos/configuration.nix";
+	update = "sudo nixos-rebuild switch";
+	garbage = "nix-collect-garbage -d";
+	hyprconf = "nvim /home/quinton/.config/hypr/hyprland.conf";
+	kittyconf = "nvim /home/quinton/.config/kitty/kitty.conf";
+      };
+
       ohMyZsh = {
         enable = true;
 	theme = "bira";
@@ -136,29 +160,26 @@
   services.gvfs.enable = true; # Mount, Trash, etc
   services.tumbler.enable = true; # Thumbnails
 
+  # Virt Manager + QEMU
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
 	pkgs.git
-	pkgs.btop
+	pkgs.htop
 	pkgs.kitty
-	# pkgs.microsoft-edge-dev
-	# pkgs.teams-for-linux
-	# pkgs.slack
-	# pkgs.discord
 	pkgs.neovim
 	pkgs.neofetch
 	pkgs.wofi
 	pkgs.hyprpaper
 	pkgs.waybar
 	pkgs.font-awesome
-	# pkgs.xfce.thunar
 	pkgs.remmina
 	pkgs.tailscale
 	pkgs.xfce.xfconf # thunar support
 	pkgs.nerdfonts
-	# pkgs.zsh
-	# pkgs.oh-my-zsh
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
