@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }: 
+{ config, pkgs, ... }:
 
 {
   imports =
@@ -17,15 +17,19 @@
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
+  #Latest Kernal + experimental features
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  nix.settings.experimental-features = [ "nix-command" "flakes"];
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
+  # Enable networking & Tailscale VPN
   networking.networkmanager.enable = true;
-
-  # Set Display
-  # monitor=eDP-2,1920x1080@59.98,0x0,1
+  services.tailscale.enable = true;
+  networking.nameservers = [ "100.100.100.100"];
+  networking.search = [ "tail67ef1.ts.net"];
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -60,9 +64,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-  
-  # Enable Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -88,28 +89,55 @@
   users.users.quinton = {
     isNormalUser = true;
     description = "quinton";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
-      firefox
+      # Terminal Tools
       zsh
       oh-my-zsh
-      # home-manager
-      slack
-      teams-for-linux
-      # microsoft-edge-dev
+      tmux
+      cbonsai
+      terraform
+
+      # Apps
+      firefox
       microsoft-edge
       discord
-      zoom-us
-      cbonsai
+      gimp
+      localsend
+      remmina
+
+      # Games
+      steam
+      prismlauncher
+
     ];
   };
-
   users.users.quinton.shell = pkgs.zsh;
   programs = {
     zsh = {
       enable = true;
       autosuggestions.enable = true;
       zsh-autoenv.enable = true;
+      syntaxHighlighting.enable = true;
+
+      shellAliases = {
+        cl = "clear";
+	re = "sudo reboot now";
+	shut = "sudo shutdown now";
+	ll = "ls -l";
+	nf = "neofetch";
+	nv = "nvim .";
+	bonsai = "cbonsai -S";
+	battery = "upower -i /org/freedesktop/UPower/devices/battery_BAT0";
+
+	nixconf = "sudo nvim /etc/nixos/configuration.nix";
+	update = "sudo nixos-rebuild switch";
+	garbage = "nix-collect-garbage -d";
+	hyprconf = "nvim /home/quinton/.config/hypr/hyprland.conf";
+	kittyconf = "nvim /home/quinton/.config/kitty/kitty.conf";
+	terraform = "sudo terraform";
+      };
+
       ohMyZsh = {
         enable = true;
 	theme = "bira";
@@ -131,37 +159,39 @@
   # Hyprland
   programs.hyprland.enable = true;
 
-  # Thunar
+  # Thunderbolt Docks
+  services.hardware.bolt.enable = true;
+
+  #Thunar   
   programs.thunar.enable = true;
   services.gvfs.enable = true; # Mount, Trash, etc
   services.tumbler.enable = true; # Thumbnails
 
+  # Virt setup
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  virtualisation.docker.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-	pkgs.git
-	pkgs.btop
-	pkgs.kitty
-	# pkgs.microsoft-edge-dev
-	# pkgs.teams-for-linux
-	# pkgs.slack
-	# pkgs.discord
-	pkgs.neovim
-	pkgs.neofetch
-	pkgs.wofi
-	pkgs.hyprpaper
-	pkgs.waybar
-	pkgs.font-awesome
-	# pkgs.xfce.thunar
-	pkgs.remmina
-	pkgs.tailscale
-	pkgs.xfce.xfconf # thunar support
-	pkgs.nerdfonts
-	# pkgs.zsh
-	# pkgs.oh-my-zsh
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-  ];
+	git
+	btop
+	kitty
+	neovim
+	neofetch
+	tailscale
+	xfce.xfconf # thunar support
+
+	# Hyprland pkgs
+	wofi
+	hyprpaper
+	waybar
+
+	# Fonts
+	nerdfonts
+	font-awesome
+ ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
