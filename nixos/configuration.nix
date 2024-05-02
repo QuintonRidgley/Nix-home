@@ -94,9 +94,9 @@
       # Terminal Tools
       zsh
       oh-my-zsh
-      tmux
       cbonsai
       terraform
+      azure-cli
 
       # Apps
       firefox
@@ -105,9 +105,6 @@
       gimp
       localsend
       remmina
-
-      # Games
-      steam
       prismlauncher
 
     ];
@@ -162,6 +159,30 @@
   # Thunderbolt Docks
   services.hardware.bolt.enable = true;
 
+  # tmux
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    extraConfig = ''
+      set -g status-right '#[fg=black,bg=color15] #{cpu_percentage}  %H:%M '
+      run-shell ${pkgs.tmuxPlugins.cpu}/share/tmux-plugins/cpu/cpu.tmux
+    '';
+  };
+
+  # Neovim
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    configure = {
+      customRC = ''
+        set number
+      '';
+      packages.myVimPackage = with pkgs.vimPlugins; {
+        start = [ ctrlp ];
+      };
+    };
+  };
+
   #Thunar   
   programs.thunar.enable = true;
   services.gvfs.enable = true; # Mount, Trash, etc
@@ -172,21 +193,26 @@
   programs.virt-manager.enable = true;
   virtualisation.docker.enable = true;
 
+  # Steam
+  programs.steam.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+  programs.gamemode.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
 	git
 	btop
 	kitty
-	neovim
 	neofetch
-	tailscale
-	xfce.xfconf # thunar support
+	mangohud
+	protonup
 
 	# Hyprland pkgs
 	wofi
 	hyprpaper
 	waybar
+	xfce.xfconf # thunar support
 
 	# Fonts
 	nerdfonts
